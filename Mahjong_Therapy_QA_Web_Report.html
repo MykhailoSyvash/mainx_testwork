@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+
+<html class="no-js" lang="uk">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>Mahjong Therapy — QA Test Report</title>
+<meta content="Interactive QA report for Mahjong Therapy Android build" name="description"/>
+<style>
+:root{--bg:#07100f;--panel:#0d1816;--panel2:#10211e;--text:#eff8f2;--muted:#97aaa2;--line:#1e3933;--teal:#36d0a2;--teal2:#147a64;--gold:#f2c66f;--critical:#c92a34;--high:#ff6a63;--med:#f2b84b;--low:#8ca4b9;--shadow:0 18px 55px rgba(0,0,0,.28)}
+*{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;background:radial-gradient(circle at 80% -10%,rgba(54,208,162,.12),transparent 30%),radial-gradient(circle at -10% 15%,rgba(242,198,111,.09),transparent 26%),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.55}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:42px 42px;mask-image:linear-gradient(to bottom,black,transparent 82%)}
+a{color:inherit} .wrap{width:min(1180px,calc(100% - 34px));margin:auto} .nav{position:sticky;top:0;z-index:20;background:rgba(7,16,15,.74);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.06)}
+.navin{height:68px;display:flex;align-items:center;justify-content:space-between;gap:16px} .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.04em} .mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(145deg,var(--teal),#0f604e);box-shadow:0 0 28px rgba(54,208,162,.25);display:grid;place-items:center;color:#06110e;font-weight:900} .navlinks{display:flex;gap:7px;flex-wrap:wrap} .navlinks a{text-decoration:none;color:var(--muted);font-size:13px;padding:8px 11px;border-radius:9px} .navlinks a:hover{color:white;background:rgba(255,255,255,.055)}
+.hero{padding:84px 0 54px;position:relative;overflow:hidden} .eyebrow{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(54,208,162,.28);background:rgba(54,208,162,.075);padding:7px 11px;border-radius:999px;color:#aaf3dc;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase} .dot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 14px var(--teal)} h1{font-size:clamp(44px,7vw,84px);line-height:.98;margin:22px 0 18px;letter-spacing:-.055em;max-width:900px} h1 span{color:var(--teal)} .lead{max-width:750px;color:#b7c8c1;font-size:18px} .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px} .btn{display:inline-flex;align-items:center;gap:9px;text-decoration:none;border-radius:12px;padding:12px 15px;font-weight:750;border:1px solid var(--line);background:#0b1715;transition:.22s transform,.22s background,.22s border-color} .btn:hover{transform:translateY(-2px);border-color:#2b5a50;background:#10211e} .btn.primary{background:linear-gradient(135deg,var(--teal),#20a77f);color:#04100c;border:0} .meta{display:flex;gap:20px;flex-wrap:wrap;margin-top:26px;color:var(--muted);font-size:13px} .meta b{color:#dbe9e3}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:22px auto 72px} .stat{background:linear-gradient(180deg,rgba(17,34,31,.9),rgba(10,23,20,.9));border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:var(--shadow);position:relative;overflow:hidden} .stat:after{content:"";position:absolute;right:-25px;bottom:-35px;width:100px;height:100px;border-radius:50%;background:radial-gradient(circle,rgba(54,208,162,.18),transparent 65%)} .num{font-size:38px;font-weight:900;letter-spacing:-.05em} .label{color:var(--muted);font-size:13px}
+section{padding:30px 0 68px;scroll-margin-top:90px} .sectionhead{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:22px} .kicker{color:var(--teal);font-size:12px;text-transform:uppercase;letter-spacing:.12em;font-weight:800} h2{font-size:34px;letter-spacing:-.035em;margin:5px 0 0} .sub{color:var(--muted);max-width:680px;font-size:14px}
+.riskgrid{display:grid;grid-template-columns:1.2fr .8fr;gap:14px} .riskcard,.coverage,.panel{background:rgba(13,24,22,.88);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)} .riskcard{padding:24px;min-height:230px} .riskcard h3{font-size:24px;margin:0 0 12px} .risklist{display:grid;gap:10px} .riskitem{display:flex;gap:12px;padding:10px 0;border-top:1px solid rgba(255,255,255,.055)} .riskitem:first-child{border-top:0} .bullet{width:9px;height:9px;border-radius:50%;background:var(--high);margin-top:8px;flex:none;box-shadow:0 0 12px rgba(255,106,99,.35)} .donutwrap{display:grid;place-items:center;height:100%} .donut{width:178px;aspect-ratio:1;border-radius:50%;background:conic-gradient(var(--critical) 0 6.25%,var(--high) 6.25% 21.875%,var(--med) 21.875% 59.375%,var(--low) 59.375% 100%);display:grid;place-items:center;box-shadow:0 0 60px rgba(0,0,0,.26)} .donut:after{content:"32";display:grid;place-items:center;width:118px;aspect-ratio:1;border-radius:50%;background:var(--panel);font-size:38px;font-weight:900}
+.coverage{padding:8px} .covrow{display:grid;grid-template-columns:180px 1fr;gap:16px;padding:14px 16px;border-top:1px solid rgba(255,255,255,.05)} .covrow:first-child{border-top:0} .covrow b{color:#d9ebe4} .covrow span{color:var(--muted)}
+.toolbar{position:sticky;top:76px;z-index:12;display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:10px;background:rgba(8,18,16,.88);backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:14px;margin-bottom:16px} .search{flex:1;min-width:210px;background:#081310;border:1px solid var(--line);border-radius:10px;padding:10px 12px;color:white;outline:none} .search:focus{border-color:#2a7865} .filter{border:1px solid var(--line);background:#0b1715;color:#aac0b7;border-radius:999px;padding:8px 11px;cursor:pointer;font-weight:700;font-size:12px} .filter.active{color:#05110d;background:var(--teal);border-color:var(--teal)} .count{margin-left:auto;color:var(--muted);font-size:12px;padding:0 5px}
+.findings{display:grid;gap:12px} .bug{background:linear-gradient(180deg,rgba(15,29,26,.94),rgba(9,21,18,.94));border:1px solid var(--line);border-radius:17px;overflow:hidden;transition:.24s transform,.24s border-color;box-shadow:0 10px 35px rgba(0,0,0,.16)} .bug:hover{transform:translateY(-2px);border-color:#2b5149} .bugsummary{width:100%;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;padding:17px 18px;background:none;border:0;color:inherit;text-align:left;cursor:pointer} .bugid{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#8fa69d;font-size:12px;font-weight:800} .bugtitle{font-weight:800;font-size:16px} .chips{display:flex;align-items:center;gap:8px;flex-wrap:wrap} .chip{font-size:11px;font-weight:850;padding:5px 8px;border-radius:999px;border:1px solid transparent} .sev-critical{color:#ffd7d9;background:rgba(201,42,52,.18);border-color:rgba(201,42,52,.48);box-shadow:inset 0 0 0 1px rgba(201,42,52,.08)} .sev-high{color:#ffb9b5;background:rgba(255,106,99,.12);border-color:rgba(255,106,99,.3)} .sev-medium{color:#ffd98c;background:rgba(242,184,75,.12);border-color:rgba(242,184,75,.28)} .sev-low{color:#c9dae6;background:rgba(140,164,185,.12);border-color:rgba(140,164,185,.28)} .area{color:#96aaa2;background:rgba(255,255,255,.035);border-color:rgba(255,255,255,.07)} .chev{font-size:18px;color:#71857d;transition:.2s transform} .bug.open .chev{transform:rotate(180deg)} .bugbody{display:none;padding:0 18px 19px;border-top:1px solid rgba(255,255,255,.055)} .bug.open .bugbody{display:block;animation:fade .22s ease} @keyframes fade{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}} .repro{display:inline-block;margin:15px 0 12px;color:#9cb0a7;font-size:12px} .cols{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px} .box{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.055);border-radius:12px;padding:14px} .box h4{margin:0 0 7px;font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:#81968d} .box p,.box ol{margin:0;color:#c8d7d1;font-size:14px} .box ol{padding-left:20px} .actual{border-left:2px solid var(--high)} .expected{border-left:2px solid var(--teal)} .note{margin-top:12px;background:rgba(242,198,111,.055);border:1px solid rgba(242,198,111,.14);border-radius:11px;padding:11px 13px;color:#d8caa9;font-size:13px} .evidence{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px} .ev{display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-size:12px;font-weight:800;color:#b8f5e1;border:1px solid rgba(54,208,162,.25);background:rgba(54,208,162,.07);border-radius:9px;padding:7px 10px} .ev:hover{background:rgba(54,208,162,.13)}
+.recgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px} .rec{background:rgba(13,24,22,.88);border:1px solid var(--line);border-radius:15px;padding:18px;position:relative;overflow:hidden} .rec:before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(var(--teal),transparent)} .recid{font-size:11px;color:var(--teal);font-weight:900;letter-spacing:.08em} .rec h3{font-size:17px;margin:7px 0} .rec p{color:#b4c4be;font-size:14px;margin:0} .rec .evidence{margin-top:12px}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:14px} .panel{padding:22px} .panel h3{margin:0 0 14px} .check{display:flex;gap:10px;padding:10px 0;border-top:1px solid rgba(255,255,255,.055);color:#b8c9c2;font-size:14px} .check:first-of-type{border-top:0} .tick{color:var(--teal);font-weight:900} .tech{color:#b6c5c0} .foot{padding:34px 0 60px;color:#73867f;font-size:12px;text-align:center} .toTop{position:fixed;right:18px;bottom:18px;width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:rgba(13,24,22,.85);backdrop-filter:blur(10px);color:#b7cac2;display:grid;place-items:center;text-decoration:none;opacity:.82}
+.hidden{display:none!important}
+@media(max-width:850px){.stats{grid-template-columns:1fr 1fr}.riskgrid,.split,.recgrid{grid-template-columns:1fr}.navlinks{display:none}.bugsummary{grid-template-columns:auto 1fr}.bugsummary .chips{grid-column:2}.chev{display:none}.cols{grid-template-columns:1fr}.covrow{grid-template-columns:1fr}}
+@media(max-width:520px){.wrap{width:min(100% - 22px,1180px)}.hero{padding-top:55px}.stats{grid-template-columns:1fr 1fr;gap:8px}.stat{padding:16px}.num{font-size:30px}h2{font-size:28px}.bugtitle{font-size:15px}}
+
+/* Progressive enhancement:
+   If JavaScript is blocked (e.g. iOS Quick Look), the report remains complete. */
+.no-js .toolbar{display:none}
+.no-js .bugsummary{cursor:default}
+.no-js .bugbody{display:block}
+.no-js .chev{display:none}
+.js .bug:not(.open) .bugbody{display:none}
+.js .bug.open .bugbody{display:block;animation:fade .22s ease}
+.js .bug.open .chev{transform:rotate(180deg)}
+.js .bug:not(.open) .chev{transform:none}
+@media(max-width:600px){
+  .hero{padding-top:38px}
+  h1{font-size:clamp(42px,12vw,64px)}
+  .lead{font-size:16px}
+  .actions .btn{flex:1 1 auto;justify-content:center}
+  .meta{gap:10px 16px}
+  .stats{gap:10px}
+  .stat{padding:18px}
+  .num{font-size:34px}
+  .bugsummary{grid-template-columns:1fr auto}
+  .bugid{grid-column:1/2}
+  .bugtitle{grid-column:1/-1;font-size:15px}
+  .chips{grid-column:1/-1}
+  .cols{grid-template-columns:1fr}
+  .covrow{grid-template-columns:1fr;gap:5px}
+}
+
+
+
+/* Mobile refinement for Scope header */
+@media (max-width: 700px){
+  #scope .sectionhead{
+    display:block !important;
+    grid-template-columns:1fr !important;
+    gap:14px !important;
+  }
+  #scope .sectionhead h2{
+    font-size:clamp(32px, 9vw, 42px) !important;
+    line-height:1.08 !important;
+    max-width:none !important;
+    margin:0 !important;
+    white-space:normal !important;
+  }
+  #scope .sectionhead .sectionnote{
+    max-width:none !important;
+    font-size:16px !important;
+    line-height:1.55 !important;
+    margin:0 !important;
+  }
+  #scope .eyebrow{
+    margin-bottom:14px !important;
+  }
+}
+</style>
+</head>
+<body>
+<div class="nav"><div class="wrap navin"><div class="brand"><div class="mark">QA</div><span>MAHJONG THERAPY</span></div><div class="navlinks"><a href="#summary">Резюме</a><a href="#coverage">Покриття</a><a href="#findings">Findings</a><a href="#recs">UX</a><a href="#tech">Technical</a></div></div></div>
+<main>
+<section class="hero"><div class="wrap"><div class="eyebrow"><span class="dot"></span> Manual QA • GameDev • Android</div><h1>Mahjong Therapy<br/><span>Interactive QA Report</span></h1><p class="lead">Функціональне, UX/UI, lifecycle, network, performance та exploratory тестування Android-збірки. Інтерактивна web-версія фінального звіту з пошуком, фільтрами та прямими evidence links.</p><div class="actions"><a class="btn primary" href="#findings">Переглянути findings →</a><a class="btn" href="https://drive.google.com/file/d/1UiBr1YOKHwtEpngTrRPMHxPQM7vWvpeT/view?usp=drivesdk" target="_blank">PDF версія ↗</a><a class="btn" href="https://drive.google.com/drive/folders/1j3MsvKl994Lz46T6yFCHU55KZk7x40Yy" target="_blank">Evidence Drive ↗</a></div><div class="meta"><span><b>Samsung Galaxy Note 10</b> / Android 12</span><span>≈10 год тестування</span><span>04.10.2026</span><span>exploratory + risk-based + targeted regression</span></div></div></section>
+<div class="wrap stats"><div class="stat"><div class="num" data-count="10">10</div><div class="label">годин тестування</div></div><div class="stat"><div class="num" data-count="2">2</div><div class="label">ігрові механіки</div></div><div class="stat"><div class="num" data-count="32">32</div><div class="label">зафіксовані проблеми</div></div><div class="stat"><div class="num" data-count="12">12</div><div class="label">UX / product recommendations</div></div></div>
+<section id="summary"><div class="wrap"><div class="sectionhead"><div><div class="kicker">01 / Executive summary</div><h2>Резюме ризиків</h2></div><div class="sub">Базове проходження стабільне, але є сильні ризики у solvability, monetization, Daily Goals та modal state handling.</div></div><div class="riskgrid"><div class="riskcard"><h3>Ключові ризики</h3><div class="risklist"><div class="riskitem"><i class="bullet"></i><span>Level 17 у pair-механіці може перейти в нерозв’язний state без recovery path.</span></div><div class="riskitem"><i class="bullet"></i><span>Rewarded ads не показуються, але reward видається одразу.</span></div><div class="riskitem"><i class="bullet"></i><span>Booster через “+” безкоштовно обходить acquisition/monetization flow.</span></div><div class="riskitem"><i class="bullet"></i><span>Daily Goals можна повторно фармити через відсутність trusted time validation.</span></div><div class="riskitem"><i class="bullet"></i><span>У pair A/B-групі є hand-специфічна Daily Goal, яку неможливо виконати.</span></div></div></div><div class="riskcard donutwrap"><div><div class="donut"></div><div style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:16px;font-size:12px;color:var(--muted)"><span><i style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--critical);margin-right:5px"></i>2 Critical</span><span><i style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--high);margin-right:5px"></i>5 High</span><span><i style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--med);margin-right:5px"></i>12 Medium</span><span><i style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--low);margin-right:5px"></i>13 Low</span></div></div></div></div></div></section>
+<section id="coverage"><div class="wrap"><div class="sectionhead"><div><div class="kicker">02 / Scope</div><h2>Покриття та методика</h2></div><div class="sub">Debug-команди використовувались лише як тестові інструменти. Debug-only side effects не включались до production bug list.</div></div><div class="coverage" id="coverageRows"><div class="covrow"><b>Gameplay</b><span>hand / pair, blocked tiles, win/lose, dead-end, special tiles, solvability</span></div>
+<div class="covrow"><b>Boosters</b><span>Hint, Shuffle, 0-count state, simultaneous activation, refill/rewarded flow</span></div>
+<div class="covrow"><b>Daily Goals</b><span>tracking, stages, reset timer, rewards, date manipulation, wording</span></div>
+<div class="covrow"><b>Challenges</b><span>leaderboard, podium, ties, rewards, max-length names</span></div>
+<div class="covrow"><b>Lifecycle</b><span>first launch, tutorials, active level, reward restore, force-stop/relaunch</span></div>
+<div class="covrow"><b>Network / SDK</b><span>offline start, online recovery observation, Remote Config, notifications</span></div>
+<div class="covrow"><b>Performance</b><span>GPUWatch / FPS on dense levels and visual effects</span></div>
+<div class="covrow"><b>Compatibility</b><span>Samsung Note 10 / Android 12, system locales Arabic/German</span></div></div></div></section>
+<section id="findings"><div class="wrap"><div class="sectionhead"><div><div class="kicker">03 / Findings</div><h2>32 findings</h2></div><div class="sub">Відфільтруй severity або знайди проблему за ключовими словами. Натисни на картку, щоб розгорнути деталі.</div></div><div class="toolbar"><input class="search" id="search" placeholder="Пошук: Daily Goals, booster, Firebase…"/><button class="filter active" data-filter="All">Усі</button><button class="filter" data-filter="Critical">Critical</button><button class="filter" data-filter="High">High</button><button class="filter" data-filter="Medium">Medium</button><button class="filter" data-filter="Low">Low</button><span class="count" id="shownCount"></span></div><div class="findings" id="bugList"><article class="bug open" data-search="bug-01 reward видається без показу rewarded ad у rewarded entry points після натискання watch bug-01 reward видається без показу rewarded ad у rewarded entry points після натискання watch critical ads / monetization ⌄ repro: 100% кроки відкрити будь-який доступний rewarded-ad entry point (наприклад refill shuffle). натиснути кнопку перегляду реклами. фактичний результат реклама не стартує; reward видається одразу. поведінка повторюється в усіх перевірених rewarded entry points. очікуваний результат reward має видаватися лише після успішного показу/завершення rewarded ad. примітка: remote config містить rewarded_min_level = 1, тобто flow активний у конфігурації. ▶ відео ↗" data-sev="Critical">
+<button aria-expanded="true" class="bugsummary" type="button">
+<span class="bugid">BUG-01</span>
+<span class="bugtitle">Reward видається без показу rewarded ad у rewarded entry points після натискання Watch</span>
+<span class="chips">
+<span class="chip sev-critical">Critical</span>
+<span class="chip area">Ads / Monetization</span>
+<span class="chev">⌄</span>
+</span>
+</button>
+<div class="bugbody">
+<span class="repro">Repro: 100%</span>
+<div class="box"><h4>Кроки</h4><ol><li>Відкрити будь-який доступний rewarded-ad entry point (наприклад refill Shuffle).</li><li>Натиснути кнопку перегляду реклами.</li></ol></div>
+<div class="cols">
+<div class="box actual"><h4>Фактичний результат</h4><p>Реклама не стартує; reward видається одразу. Поведінка повторюється в усіх перевірених rewarded entry points.</p></div>
+<div class="box expected"><h4>Очікуваний результат</h4><p>Reward має видаватися лише після успішного показу/завершення rewarded ad.</p></div>
+</div>
+<div class="note"><b>Примітка:</b> Remote Config містить rewarded_min_level = 1, тобто flow активний у конфігурації.</div>
+<div class="evidence"><a class="ev" href="https://drive.google.com/file/d/1oaoAGFuBjHiDno35AS4L9WLbwOs9QU-y/view?usp=drivesdk" rel="noopener" target="_blank">▶ Відео ↗</a></div>
+</div>
+</article><article class="bug open" data-search="bug-02 порожній booster додається через “+” без acquisition flow при count = 0 bug-02 порожній booster додається через “+” без acquisition flow при count = 0 critical boosters ⌄ repro: 100% кроки встановити count бустера в 0. натиснути “+” біля порожнього бустера. фактичний результат жодного refill/purchase/reward popup не з’являється; +1 booster додається одразу. очікуваний результат перед нарахуванням має відкриватися acquisition flow (rewarded ad / purchase / інший передбачений спосіб). безкоштовне додавання бустера через “+” напряму обходить єдину доступну на поточному build монетизаційну точку — рекламу. примітка: відтворюється і в hand, і в pair. через пряме безкоштовне поповнення бустерів має прямий monetization impact. ▶ відео ↗" data-sev="Critical">
+<button aria-expanded="true" class="bugsummary" type="button">
+<span class="bugid">BUG-02</span>
+<span class="bugtitle">Порожній booster додається через “+” без acquisition flow при count = 0</span>
+<span class="chips">
+<span class="chip sev-critical">Critical</span>
+<span class="chip area">Boosters</span>
+<span class="chev">⌄</span>
+</span>
+</button>
+<div class="bugbody">
+<span class="repro">Repro: 100%</span>
+<div class="box"><h4>Кроки</h4><ol><li>Встановити count бустера в 0.</li><li>Натиснути “+” біля порожнього бустера.</li></ol></div>
+<div class="cols">
+<div class="box actual"><h4>Фактичний результат</h4><p>Жодного refill/purchase/reward popup не з’являється; +1 booster додається одразу.</p></div>
+<div class="box expected"><h4>Очікуваний результат</h4><p>Перед нарахуванням має відкриватися acquisition flow (rewarded ad / purchase / інший передбачений спосіб). Безкоштовне додавання бустера через “+” напряму обходить єдину доступну на поточному build монетизаційну точку — рекламу.</p></div>
+</div>
+<div class="note"><b>Примітка:</b> Відтворюється і в hand, і в pair. Через пряме безкоштовне поповнення бустерів має прямий monetization impact.</div>
+<div class="evidence"><a class="ev" href="https://drive.google.com/file/d/1qWoe02DYbyc3-HyCjQk389A2cvbSQVFv/view?usp=drivesdk" rel="noopener" target="_blank">▶ Відео ↗</a></div>
+</div>
+</article><article class="bug open" data-search="bug-03 рівень стає нерозв’язним у pair на level 17 після певного порядку матчів bug-03 рівень стає нерозв’язним у pair на level 17 після певного порядку матчів high pair / gameplay ⌄ repro: 100% кроки запустити level 17 з mechanic = pair. грати валідними парами, залишивши один із однакових тайлів над його потенційною парою. дійти до стану, де альтернативних доступних пар більше немає. фактичний результат один тайл блокує відповідний тайл під ним; валідних пар немає. shuffle не розв’язує стан. єдиний workaround — restart рівня та інший порядок вибору пар. очікуваний результат валідна послідовність дій не повинна приводити до hard dead-end без recovery path; layout/solvability або recovery-механізм мають гарантувати завершення рівня. примітка: на рівні є кілька однакових пар, тому результат залежить від порядку матчів. ▶ відео ↗" data-sev="High">
+<button aria-expanded="true" class="bugsummary" type="button">
+<span class="bugid">BUG-03</span>
+<span class="bugtitle">Рівень стає нерозв’язним у pair на Level 17 після певного порядку матчів</span>
+<span class="chips">
+<span class="chip sev-high">High</span>
+<span class="chip area">Pair / Gameplay</span>
+<span class="chev">⌄</span>
+</span>
+</button>
+<div class="bugbody">
+<span class="repro">Repro: 100%</span>
+<div class="box"><h4>Кроки</h4><ol><li>Запустити Level 17 з mechanic = pair.</li><li>Грати валідними парами, залишивши один із однакових тайлів над його потенційною парою.</li><li>Дійти до стану, де альтернативних доступних пар більше немає.</li></ol></div>
+<div class="cols">
+<div class="box actual"><h4>Фактичний результат</h4><p>Один тайл блокує відповідний тайл під ним; валідних пар немає. Shuffle не розв’язує стан. Єдиний workaround — restart рівня та інший порядок вибору пар.</p></div>
+<div class="box expected"><h4>Очікуваний результат</h4><p>Валідна послідовність дій не повинна приводити до hard dead-end без recovery path; layout/solvability або recovery-механізм мають гарантувати завершення рівня.</p></div>
+</div>
+<div class="note"><b>Примітка:</b> На рівні є кілька однакових пар, тому результат залежить від порядку матчів.</div>
+<div class="evidence"><a class="ev" href="https://drive.google.com/file/d/1bSkte7d33zPR1lE5_BgYnkUIch1U4oye/view?usp=drivesdk" rel="noopener" target="_blank">▶ Відео ↗</a></div>
+</div>
+</article><article class="bug open" data-search="bug-04 daily goals повторно стають доступними після зміни системної дати / відсутня валідація часу bug-04 daily goals повторно стають доступними після зміни системної дати / відсутня валідація часу high daily goals / time logic ⌄ repro: 100% кроки виконати та забрати поточні daily goals. повністю закрити застосунок. змінити системну дату на +1 день і запустити застосунок знову. отримати новий набір daily goals / rewards та знову закрити застосунок. повернути системну дату на початковий день і запустити застосунок повторно. фактичний результат daily goals знову стають доступними; можна повторювати цикл між датами та повторно отримувати rewards. очікуваний результат daily cycle має валідувати час через trusted/server-side source або інший захищений механізм. уже завершений цикл не повинен ставати доступним повторно через зміну локальної дати/часу на пристрої." data-sev="High">
+<button aria-expanded="true" class="bugsummary" type="button">
+<span class="bugid">BUG-04</span>
+<span class="bugtitle">Daily Goals повторно стають доступними після зміни системної дати / відсутня валідація часу</span>
+<span class="chips">
+<span class="chip sev-high">High</span>
+<span class="chip area">Daily Goals / Time Logic</span>
+<span class="chev">⌄</span>
+</span>
+</button>
+<div class="bugbody">
+<span class="repro">Repro: 100%</span>
+<div class="box"><h4>Кроки</h4><ol><li>Виконати та забрати поточні Daily Goals.</li><li>Повністю закрити застосунок.</li><li>Змінити системну дату на +1 день і запустити застосунок знову.</li><li>Отримати новий набір Daily Goals / rewards та знову закрити застосунок.</li><li>Повернути системну дату на початковий день і запустити застосунок повторно.</li></ol></div>
+<div class="cols">
+<div class="box actual"><h4>Фактичний результат</h4><p>Daily Goals знову стають доступними; можна повторювати цикл між датами та повторно отримувати rewards.</p></div>
+<div class="box expected"><h4>Очікуваний результат</h4><p>Daily cycle має валідувати час через trusted/server-side source або інший захищений механізм. Уже завершений цикл не повинен ставати доступним повторно через зміну локальної дати/часу на пристрої.</p></div>
+</div>
+</div>
+</article><article class="bug open" data-search="bug-05 hand-специфічна задача “match 4 times” з’являється в daily goals у pair a/b-групі bug-05 hand-специфічна задача “match 4 times” з’являється в daily goals у pair a/b-групі high daily goals / a-b ⌄ repro: 100% кроки активувати mechanic = pair. відкрити daily goals. отримати/перевірити задачу “match 4 times”. фактичний результат задача, що відповідає hand-механіці, показується в pair; виконати її в pair неможливо. очікуваний результат task pool має відповідати активній mechanic або кожна задача має бути виконуваною в обох a/b-групах." data-sev="High">
+<button aria-expanded="true" class="bugsummary" type="button">
+<span class="bugid">BUG-05</span>
+<span class="bugtitle">Hand-специфічна задача “Match 4 times” з’являється в Daily Goals у pair A/B-групі</span>
+<span class="chips">
+<span class="chip sev-high">High</span>
+<span class="chip area">Daily Goals / A-B</span>
+<span class="chev">⌄</span>
+</span>
+</button>
+<div class="bugbody">
+<span class="repro">Repro: 100%</span>
+<div class="box"><h4>Кроки</h4><ol><li>Активувати mechanic = pair.</li><li>Відкрити Daily Goals.</li><li>Отримати/перевірити задачу “Match 4 times”.</li></ol></div>
+<div class="cols">
+<div class="box actual"><h4>Фактичний результат</h4><p>Задача, що відповідає hand-механіці, показується в pair; виконати її в pair неможливо.</p></div>
+<div class="box expected"><h4>Очікуваний результат</h4><p>Task pool має відповідати активній mechanic або кожна задача має бути виконуваною в обох A/B-групах.</p></div>
+</div>
+</div>
+</article><article class="bug open" data-search="bug-06 зароблена daily goals нагорода втрачається після reset, якщо закрити гру під час reward flow bug-06 зароблена daily goals нагорода втрачається після reset, якщо закрити гру під час reward flow high daily goals / rewards ⌄ repro: 100% кроки виконати умови daily goals у рівні, щоб запустилась reward-анімація. закрити застосунок до завершення/фіксації нагороди. дочекатись/спровокувати reset циклу та перезапустити застосунок. фактичний результат новий daily goals cycle вже активний, а booster/reward з попереднього завершеного циклу не нарахований і не відновлюється. очікуваний результат earned reward має зберігатися атомарно або залишатися claimable після reset. примітка: зміна часу використовувалась лише для прискорення reset під час перевірки." data-sev="High">
+<button aria-expanded="true" class="bugsummary" type="button">
+<span class="bugid">BUG-06</span>
+<span class="bugtitle">Зароблена Daily Goals нагорода втрачається після reset, якщо закрити гру під час reward flow</span>
+<span class="chips">
+<span class="chip sev-high">High</span>
+<span class="chip area">Daily Goals / Rewards</span>
+<span class="chev">⌄</span>
+</span>
+</button>
+<div class="bugbody">
+<span class="repro">Repro: 100%</span>
+<div class="box"><h4>Кроки</h4><ol><li>Виконати умови Daily Goals у рівні, щоб запустилась reward-анімація.</li><li>Закрити застосунок до завершення/фіксації нагороди.</li><li>Дочекатись/спровокувати reset циклу та перезапустити застосунок.</li></ol></div>
+<div class="cols">
+<div class="box actual"><h4>Фактичний результат</h4><p>Новий Daily Goals cycle вже активний, а booster/reward з попереднього завершеного циклу не нарахований і не відновлюється.</p></div>
+<div class="box expected"><h4>Очікуваний результат</h4><p>Earned reward має зберігатися атомарно або залишатися claimable після reset.</p></div>
+</div>
+<div class="note"><b>Примітка:</b> Зміна часу використовувалась лише для прискорення reset під час перевірки.</div>
+</div>
+</article><article class="bug open" data-search="bug-07 gameplay-елементи під lose level popup реагують на tap, коли popup відкритий bug-07 gameplay-елементи під lose level popup реагують на tap, коли popup відкритий high gameplay / modal ui ⌄ repro: 100% кроки довести рівень до lose/dead-end state. коли lose level popup відкритий, натискати в координати gameplay-кнопок/елементів під popup. фактичний результат елементи під модальним вікном фактично реагують на натискання. очікуваний результат lose popup має повністю блокувати pointer/touch input до underlying gameplay ui. ▶ відео ↗" data-sev="High">
+<button aria-expanded="true" class="bugsummary" type="button">
+<span class="bugid">BUG-07</span>
+<span class="bugtitle">Gameplay-елементи під Lose Level popup реагують на tap, коли popup відкритий</span>
+<span class="chips">
+<span class="chip sev-high">High</span>
+<span class="chip area">Gameplay / Modal UI</span>
+<span class="chev">⌄</span>
+</span>
+</button>
+<div class="bugbody">
+<span class="repro">Repro: 100%</span>
+<div class="box"><h4>Кроки</h4><ol><li>Довести рівень до lose/dead-end state.</li><li>Коли Lose Level popup відкритий, натискати в координати gameplay-кнопок/елементів під popup.</li></ol></div>
+<div class="cols">
+<div class="box actual"><h4>Фактичний результат</h4><p>Елементи під модальним вікном фактично реагують на натискання.</p></div>
+<div class="box expected"><h4>Очікуваний результат</h4><p>Lose popup має повністю блокувати pointer/touch input до underlying gameplay UI.</p></div>
+</div>
+<div class="evidence"><a class="ev" href="https://drive.google.com/file/d/1OijMMeRs8tEmqFC2iwOksC2q7_dT4TZ-/view?usp=drivesdk" rel="noopener" target="_blank">▶ Відео ↗</a></div>
+</div>
+</article><article class="bug open" data-search="bug-08 “match 4 times” додає лише +1 у daily goals після завершення рівня в hand bug-08 “match 4 times” додає лише +1 у daily goals після завершення рівня в hand medium daily goals / tracking ⌄ repro: 100% кроки активувати hand. зробити декілька match-ів у межах одного рівня. завершити рівень та перевірити прогрес daily goal. фактичний результат незалежно від кількості match-ів прогрес збільшується лише на +1 і тільки після перемоги. очікуваний результат якщо wording “match 4 times” буквальний, кожен валідний match має збільшувати прогрес." data-sev="Medium">
+<button aria-expanded="true" class="bugsummary" type="button">
+<span class="bugid">BUG-08</span>
+<span class="bugtitle">“Match 4 times” додає лише +1 у Daily Goals після завершення рівня в hand</span>
+<span class="chips">
+<span class="chip sev-medium">Medium</span>
+<span class="chip area">Daily Goals / Tracking</span>
+<span class="chev">⌄</span>
+</span>
+</button>
+<div class="bugbody">
+<span class="repro">Repro: 100%</span>
+<div class="box"><h4>Кроки</h4><ol><li>Активувати hand.</li><li>Зробити декілька match-ів у межах одного рівня.</li><li>Завершити рівень та перевірити прогрес Daily Goal.</li></ol></div>
+<div class="cols">
+<div class="box actual"><h4>Фактичний результат</h4><p>Незалежно від кількості match-ів прогрес збільшується лише на +1 і тільки після перемоги.</p></div>
+<div class="box expected"><h4>Очікуваний результат</h4><p>Якщо wording “Match 4 times” буквальний, кожен валідний match має збільшувати прогрес.</p></div>
+</div>
+</div>
+</article><article class="bug open" data-search="bug-09 daily goals не оновлюються в активній сесії після завершення відліку на таймері bug-09 daily goals не оновлюються в активній сесії після завершення відліку на таймері medium daily goals / timer ⌄ repro: 100% кроки залишити гру активною до завершення daily goals countdown. дочекатися 00:00:00. перевірити список задач без перезапуску. фактичний результат timer доходить до нуля, але новий daily cycle не з’являється до relaunch застосунку. очікуваний результат daily goals мають автоматично refresh-итись при завершенні таймера або після найближчого state refresh без relaunch. ▶ відео ↗" data-sev="Medium">
+<button aria-expanded="true" class="bugsummary" type="button">
+<span class="bugid">BUG-09</span>
+<span class="bugtitle">Daily Goals не оновлюються в активній сесії після завершення відліку на таймері</span>
+<span class="chips">
+<span class="chip sev-medium">Medium</span>
+<span class="chip area">Daily Goals / Timer</span>
+<span class="chev">⌄</span>
+</span>
+</button>
+<div class="bugbody">
+<span class="repro">Repro: 100%</span>
+<div class="box"><h4>Кроки</h4><ol><li>Залишити гру активною до завершення Daily Goals countdown.</li><li>Дочекатися 00:00:00.</li><li>Перевірити список задач без перезапуску.</li></ol></div>
+<div class="cols">
+<div class="box actual"><h4>Фактичний результат</h4><p>Timer доходить до нуля, але новий daily cycle не з’являється до relaunch застосунку.</p></div>
+<div class="box expected"><h4>Очікуваний результат</h4><p>Daily Goals мають автоматично refresh-итись при завершенні таймера або після найближчого state refresh без relaunch.</p></div>
+</div>
+<div class="evidence"><a class="ev" href="https://drive.google.com/file/d/1Txy_uGjLiIri55ZSev7EaV0u1LojtNNt/view?usp=drivesdk" rel="noopener" target="_blank">▶ Відео ↗</a></div>
+</div>
+</article><article class="bug open" data-search="bug-10 однаковий golden tiles score отримує різний rank у leaderboard і podium при однаковому результаті. bug-10 однаковий golden tiles score отримує різний rank у leaderboard і podium при однаковому результаті. medium throne challenge / ranking ⌄ repro: 100% кроки створити/спостерігати tie за golden tiles score у кількох гравців. порівняти rank у таблиці та podium/result presentation. фактичний результат у таблиці кілька гравців із однаковим score отримують один rank, тоді як podium розставляє їх як 1/2/3; rank 2/3 у таблиці можуть належати іншим гравцям. очікуваний результат tie handling та tiebreaker мають бути однаковими в усіх представленнях challenge. ▶ відео ↗" data-sev="Medium">
+<button aria-expanded="true" class="bugsummary" type="button">
+<span class="bugid">BUG-10</span>
+<span class="bugtitle">Однаковий Golden Tiles score отримує різний rank у leaderboard і podium при однаковому результаті.</span>
+<span class="chips">
+<span class="chip sev-medium">Medium</span>
+<span class="chip area">Throne Challenge / Ranking</span>
+<span class="chev">⌄</span>
+</span>
+</button>
+<div class="bugbody">
+<span class="repro">Repro: 100%</span>
+<div class="box"><h4>Кроки</h4><ol><li>Створити/спостерігати tie за Golden Tiles score у кількох гравців.</li><li>Порівняти rank у таблиці та podium/result presentation.</li></ol></div>
+<div class="cols">
+<div class="box actual"><h4>Фактичний результат</h4><p>У таблиці кілька гравців із однаковим score отримують один rank, тоді як podium розставляє їх як 1/2/3; rank 2/3 у таблиці можуть належати іншим гравцям.</p></div>
+<div class="box expected"><h4>Очікуваний результат</h4><p>Tie handling та tiebreaker мають бути однаковими в усіх представленнях Challenge.</p></div>
+</div>
+<div class="evidence"><a class="ev" href="https://drive.google.com/file/d/1ZFPt_WWXi9nNEDFsA3vKiWKCezg1dqlJ/view?usp=drivesdk" rel="noopener" target="_blank">▶ Відео ↗</a></div>
+</div>
+</article><article class="bug open" data-search="bug-11 неприпустиме слово зберігається як публічне ім’я та відображається в challenge leaderboard bug-11 неприпустиме слово зберігається як публічне ім’я та відображається в challenge leaderboard medium profile / moderation ⌄ repro: 100% кроки відкрити редагування профілю. ввести inappropriate word (перевірено на “porn”). зберегти та відкрити challenge leaderboard. фактичний результат ім’я приймається та публічно відображається в leaderboard. очікуваний результат публічні display names мають проходити content moderation / profanity validation." data-sev="Medium">
+<button aria-expanded="true" class="bugsummary" type="button">
+<span class="bugid">BUG-11</span>
+<span class="bugtitle">Неприпустиме слово зберігається як публічне ім’я та відображається в Challenge leaderboard</span>
+<span class="chips">
+<span class="chip sev-medium">Medium</span>
+<span class="chip area">Profile / Moderation</span>
+<span class="chev">⌄</span>
+</span>
+</button>
+<div class="bugbody">
+<span class="repro">Repro: 100%</span>
+<div class="box"><h4>Кроки</h4><ol><li>Відкрити редагування профілю.</li><li>Ввести inappropriate word (перевірено на “porn”).</li><li>Зберегти та відкрити Challenge leaderboard.</li></ol></div>
+<div class="cols">
+<div class="box actual"><h4>Фактичний результат</h4><p>Ім’я приймається та публічно відображається в leaderboard.</p></div>
+<div class="box expected"><h4>Очікуваний результат</h4><p>Публічні display names мають проходити content moderation / profanity validation.</p></div>
+</div>
+</div>
+</article><article class="bug open" data-search="bug-12 порожнє ім’я замінюється згенерованим id у profile після натискання save bug-12 порожнє ім’я замінюється згенерованим id у profile після натискання save medium profile / validation ⌄ repro: 100% кроки відкрити редагування імені. видалити всі символи. натиснути save. фактичний результат порожнє значення приймається та замінюється випадковим алфавітно-цифровим id без пояснення. очікуваний результат порожнє ім’я слід блокувати або явно пояснювати автоматичне генерування значення." data-sev="Medium">
+<button aria-expanded="true" class="bugsummary" type="button">
+<span class="bugid">BUG-12</span>
+<span class="bugtitle">Порожнє ім’я замінюється згенерованим ID у Profile після натискання Save</span>
+<span class="chips">
+<span class="chip sev-medium">Medium</span>
+<span class="chip area">Profile / Validation</span>
+<span class="chev">⌄</span>
+</span>
+</button>
+<div class="bugbody">
+<span class="repro">Repro: 100%</span>
+<div class="box"><h4>Кроки</h4><ol><li>Відкрити редагування імені.</li><li>Видалити всі символи.</li><li>Натиснути Save.</li></ol></div>
+<div class="cols">
+<div class="box actual"><h4>Фактичний результат</h4><p>Порожнє значення приймається та замінюється випадковим алфавітно-цифровим ID без пояснення.</p></div>
+<div class="box expected"><h4>Очікуваний результат</h4><p>Порожнє ім’я слід блокувати або явно пояснювати автоматичне генерування значення.</p></div>
+</div>
+</div>
+</article><article class="bug open" data-search="bug-13 ім’я максимальної довжини не вміщується в challenge ui при 12 символах bug-13 ім’я максимальної довжини не вміщується в challenge ui при 12 символах medium challenge / layout ⌄ repro: 100% кроки задати валідне ім’я максимальної довжини (12 символів). відкрити challenge leaderboard та reward/podium flow. фактичний результат ім’я накладається/не вміщується поруч із gold tiles icon/counter та в окремих challenge reward/podium екранах. очікуваний результат максимально дозволене ім’я має коректно fit/scale/truncate у всіх challenge компонентах. ▧ скрін ↗" data-sev="Medium">
+<button aria-expanded="true" class="bugsummary" type="button">
+<span class="bugid">BUG-13</span>
+<span class="bugtitle">Ім’я максимальної довжини не вміщується в Challenge UI при 12 символах</span>
+<span class="chips">
+<span class="chip sev-medium">Medium</span>
+<span class="chip area">Challenge / Layout</span>
+<span class="chev">⌄</span>
+</span>
+</button>
+<div class="bugbody">
+<span class="repro">Repro: 100%</span>
+<div class="box"><h4>Кроки</h4><ol><li>Задати валідне ім’я максимальної довжини (12 символів).</li><li>Відкрити Challenge leaderboard та reward/podium flow.</li></ol></div>
+<div class="cols">
+<div class="box actual"><h4>Фактичний результат</h4><p>Ім’я накладається/не вміщується поруч із Gold Tiles icon/counter та в окремих Challenge reward/podium екранах.</p></div>
+<div class="box expected"><h4>Очікуваний результат</h4><p>Максимально дозволене ім’я має коректно fit/scale/truncate у всіх Challenge компонентах.</p></div>
+</div>
+<div class="evidence"><a class="ev" href="https://drive.google.com/file/d/1cUCXvXRmmjNUPKOlErTfT-u9Cli3NjCw/view?usp=drivesdk" rel="noopener" target="_blank">▧ Скрін ↗</a></div>
+</div>
+</article><article class="bug open" data-search="bug-14 underlying ui дає haptic feedback під модальними popup-ами при tap по заблокованих контролах bug-14 underlying ui дає haptic feedback під модальними popup-ами при tap по заблокованих контролах medium ui / modal ⌄ repro: 100% кроки у main menu відкрити settings, daily goals, daily challenge або throne challenge popup. при увімкненому haptic tap-ати в координати контролів під popup. фактичний результат underlying action не виконується, але haptic feedback спрацьовує, ніби елемент отримав touch. очікуваний результат modal layer має блокувати всі interaction side effects, включно з haptic feedback. примітка: також спостерігалось для settings усередині активного рівня." data-sev="Medium">
+<button aria-expanded="true" class="bugsummary" type="button">
+<span class="bugid">BUG-14</span>
+<span class="bugtitle">Underlying UI дає haptic feedback під модальними popup-ами при tap по заблокованих контролах</span>
+<span class="chips">
+<span class="chip sev-medium">Medium</span>
+<span class="chip area">UI / Modal</span>
+<span class="chev">⌄</span>
+</span>
+</button>
+<div class="bugbody">
+<span class="repro">Repro: 100%</span>
+<div class="box"><h4>Кроки</h4><ol><li>У Main Menu відкрити Settings, Daily Goals, Daily Challenge або Throne Challenge popup.</li><li>При увімкненому haptic tap-ати в координати контролів під popup.</li></ol></div>
+<div class="cols">
+<div class="box actual"><h4>Фактичний результат</h4><p>Underlying action не виконується, але haptic feedback спрацьовує, ніби елемент отримав touch.</p></div>
+<div class="box expected"><h4>Очікуваний результат</h4><p>Modal layer має блокувати всі interaction side effects, включно з haptic feedback.</p></div>
+</div>
+<div class="note"><b>Примітка:</b> Також спостерігалось для Settings усередині активного рівня.</div>
+</div>
+</article><article class="bug open" data-search="bug-15 nullreferenceexception виникає в hand при виході з рівня під час анімації match bug-15 nullreferenceexception виникає в hand при виході з рівня під час анімації match medium stability / hand ⌄ repro: 100% кроки у hand зробити match. поки matched tiles анімуються до upper collection panel, натиснути back. фактичний результат у логах виникає nullreferenceexception у iqhud.playgainasync / uitween.punch / graphic.setverticesdirty. очікуваний результат асинхронна анімація має коректно cancel/dispose-итись при виході з gameplay state. примітка: візуального crash не спостерігалось. ⌘ лог ↗" data-sev="Medium">
+<button aria-expanded="true" class="bugsummary" type="button">
+<span class="bugid">BUG-15</span>
+<span class="bugtitle">NullReferenceException виникає в hand при виході з рівня під час анімації match</span>
+<span class="chips">
+<span class="chip sev-medium">Medium</span>
+<span class="chip area">Stability / Hand</span>
+<span class="chev">⌄</span>
+</span>
+</button>
+<div class="bugbody">
+<span class="repro">Repro: 100%</span>
+<div class="box"><h4>Кроки</h4><ol><li>У hand зробити match.</li><li>Поки matched tiles анімуються до upper collection panel, натиснути Back.</li></ol></div>
+<div class="cols">
+<div class="box actual"><h4>Фактичний результат</h4><p>У логах виникає NullReferenceException у IqHud.PlayGainAsync / UiTween.Punch / Graphic.SetVerticesDirty.</p></div>
+<div class="box expected"><h4>Очікуваний результат</h4><p>Асинхронна анімація має коректно cancel/dispose-итись при виході з gameplay state.</p></div>
+</div>
+<div class="note"><b>Примітка:</b> Візуального crash не спостерігалось.</div>
+<div class="evidence"><a class="ev" href="https://drive.google.com/file/d/1GWCvIUY6NhXjX1mFJnHldA-9-CfrUqw9/view?usp=drivesdk" rel="noopener" target="_blank">⌘ Лог ↗</a></div>
+</div>
+</article><article class="bug open" data-search="bug-16 заблокований номерний синій тайтл не затемнюється при ввімкненому “highlight free tiles” bug-16 заблокований номерний синій тайтл не затемнюється при ввімкненому “highlight free tiles” medium gameplay / visual state ⌄ repro: 100% кроки увімкнути “highlight free tiles”. дійти до стану, де numbered blue special tile заблокований іншим тайлом. фактичний результат звичайні blocked tiles затемнюються, а numbered blue tile лишається яскравим, створюючи хибний сигнал доступності. очікуваний результат blocked state має візуально позначатися однаково для всіх типів тайлів. add info: вірогідно, тайтл трави теж не затемнюється. ▧ скрін ↗" data-sev="Medium">
+<button aria-expanded="true" class="bugsummary" type="button">
+<span class="bugid">BUG-16</span>
+<span class="bugtitle">Заблокований номерний синій тайтл не затемнюється при ввімкненому “Highlight free tiles”</span>
+<span class="chips">
+<span class="chip sev-medium">Medium</span>
+<span class="chip area">Gameplay / Visual State</span>
+<span class="chev">⌄</span>
+</span>
+</button>
+<div class="bugbody">
+<span class="repro">Repro: 100%</span>
+<div class="box"><h4>Кроки</h4><ol><li>Увімкнути “Highlight free tiles”.</li><li>Дійти до стану, де numbered blue special tile заблокований іншим тайлом.</li></ol></div>
+<div class="cols">
+<div class="box actual"><h4>Фактичний результат</h4><p>Звичайні blocked tiles затемнюються, а numbered blue tile лишається яскравим, створюючи хибний сигнал доступності.</p></div>
+<div class="box expected"><h4>Очікуваний результат</h4><p>Blocked state має візуально позначатися однаково для всіх типів тайлів.</p></div>
+</div>
+<div class="note"><b>Add info:</b> Вірогідно, тайтл трави теж не затемнюється.</div>
+<div class="evidence"><a class="ev" href="https://drive.google.com/file/d/1ipgIPurtlnkcj4o-G8jubXRClEgWszVC/view?usp=drivesdk" rel="noopener" target="_blank">▧ Скрін ↗</a></div>
+</div>
+</article><article class="bug open" data-search="bug-17 fps падає на щільних рівнях і додатково просідає під час visual effects bug-17 fps падає на щільних рівнях і додатково просідає під час visual effects medium performance ⌄ repro: 100% кроки увімкнути gpuwatch. порівняти прості рівні та level 55. запустити grass/full-screen effect. фактичний результат на простих сценах ~60 fps; на level 55 baseline близько ~55 fps, під grass/full-screen effect падіння приблизно до ~47 fps або нижче. очікуваний результат frame rate має залишатися стабільним на підтримуваному пристрої; visual effects не повинні створювати помітний stutter. ▶ відео ↗ ⌘ pair perf ↗" data-sev="Medium">
+<button aria-expanded="true" class="bugsummary" type="button">
+<span class="bugid">BUG-17</span>
+<span class="bugtitle">FPS падає на щільних рівнях і додатково просідає під час visual effects</span>
+<span class="chips">
+<span class="chip sev-medium">Medium</span>
+<span class="chip area">Performance</span>
+<span class="chev">⌄</span>
+</span>
+</button>
+<div class="bugbody">
+<span class="repro">Repro: 100%</span>
+<div class="box"><h4>Кроки</h4><ol><li>Увімкнути GPUWatch.</li><li>Порівняти прості рівні та Level 55.</li><li>Запустити grass/full-screen effect.</li></ol></div>
+<div class="cols">
+<div class="box actual"><h4>Фактичний результат</h4><p>На простих сценах ~60 FPS; на Level 55 baseline близько ~55 FPS, під grass/full-screen effect падіння приблизно до ~47 FPS або нижче.</p></div>
+<div class="box expected"><h4>Очікуваний результат</h4><p>Frame rate має залишатися стабільним на підтримуваному пристрої; visual effects не повинні створювати помітний stutter.</p></div>
+</div>
+<div class="evidence"><a class="ev" href="https://drive.google.com/file/d/1QEqRuPGkF12XPNtbgo6rmzdMIfSexdwV/view?usp=drivesdk" rel="noopener" target="_blank">▶ Відео ↗</a><a class="ev" href="https://drive.google.com/file/d/1meyXper-tMR61qzaJ2mB9UfyaLE3VX_Y/view?usp=drivesdk" rel="noopener" target="_blank">⌘ Pair perf ↗</a></div>
+</div>
+</article><article class="bug open" data-search="bug-18 firebaseexception виникає при запуску застосунку без інтернету bug-18 firebaseexception виникає при запуску застосунку без інтернету medium network / firebase remote config ⌄ repro: 100% — кожен перевірений запуск без інтернету кроки вимкнути інтернет. запустити гру з чистого/першого запуску. фактичний результат у логах виникає firebaseexception під час fetchremoteconfigasync; гра при цьому продовжує запуск. очікуваний результат відсутність мережі під час старту має оброблятися без exception у логах: remote config повинен fallback-нути на cached/default values та безпечно продовжити запуск. ⌘ лог ↗" data-sev="Medium">
+<button aria-expanded="true" class="bugsummary" type="button">
+<span class="bugid">BUG-18</span>
+<span class="bugtitle">FirebaseException виникає при запуску застосунку без інтернету</span>
+<span class="chips">
+<span class="chip sev-medium">Medium</span>
+<span class="chip area">Network / Firebase Remote Config</span>
+<span class="chev">⌄</span>
+</span>
+</button>
+<div class="bugbody">
+<span class="repro">Repro: 100% — кожен перевірений запуск без інтернету</span>
+<div class="box"><h4>Кроки</h4><ol><li>Вимкнути інтернет.</li><li>Запустити гру з чистого/першого запуску.</li></ol></div>
+<div class="cols">
+<div class="box actual"><h4>Фактичний результат</h4><p>У логах виникає FirebaseException під час FetchRemoteConfigAsync; гра при цьому продовжує запуск.</p></div>
+<div class="box expected"><h4>Очікуваний результат</h4><p>Відсутність мережі під час старту має оброблятися без exception у логах: Remote Config повинен fallback-нути на cached/default values та безпечно продовжити запуск.</p></div>
+</div>
+<div class="evidence"><a class="ev" href="https://drive.google.com/file/d/1OkzZ4q-JhFmU8S30QIFJzMg_ogkZ7YMZ/view?usp=drivesdk" rel="noopener" target="_blank">⌘ Лог ↗</a></div>
+</div>
+</article><article class="bug open" data-search="bug-19 анімації shuffle і hint накладаються при одночасній активації бустерів bug-19 анімації shuffle і hint накладаються при одночасній активації бустерів medium boosters / ui ⌄ repro: 100% кроки запустити рівень. натиснути shuffle. одразу, до завершення transition, натиснути hint. фактичний результат обидві booster actions приймаються в одному transition window; visual feedback/board animations накладаються та виглядають некоректно. очікуваний результат на час активної booster animation інші booster controls мають бути тимчасово locked. примітка: 100% reproducible у hand і pair. ▶ відео ↗" data-sev="Medium">
+<button aria-expanded="true" class="bugsummary" type="button">
+<span class="bugid">BUG-19</span>
+<span class="bugtitle">Анімації Shuffle і Hint накладаються при одночасній активації бустерів</span>
+<span class="chips">
+<span class="chip sev-medium">Medium</span>
+<span class="chip area">Boosters / UI</span>
+<span class="chev">⌄</span>
+</span>
+</button>
+<div class="bugbody">
+<span class="repro">Repro: 100%</span>
+<div class="box"><h4>Кроки</h4><ol><li>Запустити рівень.</li><li>Натиснути Shuffle.</li><li>Одразу, до завершення transition, натиснути Hint.</li></ol></div>
+<div class="cols">
+<div class="box actual"><h4>Фактичний результат</h4><p>Обидві booster actions приймаються в одному transition window; visual feedback/board animations накладаються та виглядають некоректно.</p></div>
+<div class="box expected"><h4>Очікуваний результат</h4><p>На час активної booster animation інші booster controls мають бути тимчасово locked.</p></div>
+</div>
+<div class="note"><b>Примітка:</b> 100% reproducible у hand і pair.</div>
+<div class="evidence"><a class="ev" href="https://drive.google.com/file/d/1KgWlgyaDiuMfS6fCe8ckLNFt0NomPAWP/view?usp=drivesdk" rel="noopener" target="_blank">▶ Відео ↗</a></div>
+</div>
+</article><article class="bug open" data-search="bug-20 booster controls реагують під час level completion sequence після завершення рівня bug-20 booster controls реагують під час level completion sequence після завершення рівня low gameplay / state lock ⌄ repro: 100% кроки завершити рівень. під час victory animation натискати shuffle/hint. фактичний результат кнопки реагують, підсвічуються/вібрують; можуть з’являтися prompt-и на кшталт “use shuffle?”, хоча рівень уже завершено. очікуваний результат gameplay controls мають блокуватися одразу після переходу в completed state. ▶ відео ↗" data-sev="Low">
+<button aria-expanded="true" class="bugsummary" type="button">
+<span class="bugid">BUG-20</span>
+<span class="bugtitle">Booster controls реагують під час level completion sequence після завершення рівня</span>
+<span class="chips">
+<span class="chip sev-low">Low</span>
+<span class="chip area">Gameplay / State Lock</span>
+<span class="chev">⌄</span>
+</span>
+</button>
+<div class="bugbody">
+<span class="repro">Repro: 100%</span>
+<div class="box"><h4>Кроки</h4><ol><li>Завершити рівень.</li><li>Під час victory animation натискати Shuffle/Hint.</li></ol></div>
+<div class="cols">
+<div class="box actual"><h4>Фактичний результат</h4><p>Кнопки реагують, підсвічуються/вібрують; можуть з’являтися prompt-и на кшталт “Use shuffle?”, хоча рівень уже завершено.</p></div>
+<div class="box expected"><h4>Очікуваний результат</h4><p>Gameplay controls мають блокуватися одразу після переходу в completed state.</p></div>
+</div>
+<div class="evidence"><a class="ev" href="https://drive.google.com/file/d/1p2wGAl6D4fVCzh9Umjp_xtLy1XZItoRL/view?usp=drivesdk" rel="noopener" target="_blank">▶ Відео ↗</a></div>
+</div>
+</article><article class="bug open" data-search="bug-21 nullreferenceexception виникає в taskdialog.showtipasync під час переходів між ui states bug-21 nullreferenceexception виникає в taskdialog.showtipasync під час переходів між ui states low stability / ui async ⌄ repro: intermittent (~1/3) кроки взаємодіяти з popup/tip flow та переходити між ui states. фактичний результат час від часу в логах з’являється nullreferenceexception у transform.set_localscale / taskdialog.showtipasync. очікуваний результат async dialog/tip animation має безпечно завершуватись або cancel-итись при зміні state. примітка: стабільний wtr не встановлено; видимого impact не зафіксовано. ⌘ лог ↗" data-sev="Low">
+<button aria-expanded="true" class="bugsummary" type="button">
+<span class="bugid">BUG-21</span>
+<span class="bugtitle">NullReferenceException виникає в TaskDialog.ShowTipAsync під час переходів між UI states</span>
+<span class="chips">
+<span class="chip sev-low">Low</span>
+<span class="chip area">Stability / UI Async</span>
+<span class="chev">⌄</span>
+</span>
+</button>
+<div class="bugbody">
+<span class="repro">Repro: Intermittent (~1/3)</span>
+<div class="box"><h4>Кроки</h4><ol><li>Взаємодіяти з popup/tip flow та переходити між UI states.</li></ol></div>
+<div class="cols">
+<div class="box actual"><h4>Фактичний результат</h4><p>Час від часу в логах з’являється NullReferenceException у Transform.set_localScale / TaskDialog.ShowTipAsync.</p></div>
+<div class="box expected"><h4>Очікуваний результат</h4><p>Async dialog/tip animation має безпечно завершуватись або cancel-итись при зміні state.</p></div>
+</div>
+<div class="note"><b>Примітка:</b> Стабільний WTR не встановлено; видимого impact не зафіксовано.</div>
+<div class="evidence"><a class="ev" href="https://drive.google.com/file/d/1am6MWAQCzsRypNZ_0gOBpnZWc2zBCYe6/view?usp=drivesdk" rel="noopener" target="_blank">⌘ Лог ↗</a></div>
+</div>
+</article><article class="bug open" data-search="bug-22 nullreferenceexception виникає в goldtilescounter.glowasync під час glow/transition bug-22 nullreferenceexception виникає в goldtilescounter.glowasync під час glow/transition low stability / challenge ui ⌄ repro: intermittent кроки виконувати дії, що запускають glow gold tiles counter, та переходити між state/screens. фактичний результат у логах періодично виникає nullreferenceexception у canvasgroup.set_alpha / goldtilescounter.glowasync. очікуваний результат glow coroutine/task має коректно cancel/dispose-итись при destroy/transition. примітка: стабільний wtr не встановлено; видимого impact не зафіксовано. ⌘ лог ↗" data-sev="Low">
+<button aria-expanded="true" class="bugsummary" type="button">
+<span class="bugid">BUG-22</span>
+<span class="bugtitle">NullReferenceException виникає в GoldTilesCounter.GlowAsync під час glow/transition</span>
+<span class="chips">
+<span class="chip sev-low">Low</span>
+<span class="chip area">Stability / Challenge UI</span>
+<span class="chev">⌄</span>
+</span>
+</button>
+<div class="bugbody">
+<span class="repro">Repro: Intermittent</span>
+<div class="box"><h4>Кроки</h4><ol><li>Виконувати дії, що запускають glow Gold Tiles counter, та переходити між state/screens.</li></ol></div>
+<div class="cols">
+<div class="box actual"><h4>Фактичний результат</h4><p>У логах періодично виникає NullReferenceException у CanvasGroup.set_alpha / GoldTilesCounter.GlowAsync.</p></div>
+<div class="box expected"><h4>Очікуваний результат</h4><p>Glow coroutine/task має коректно cancel/dispose-итись при destroy/transition.</p></div>
+</div>
+<div class="note"><b>Примітка:</b> Стабільний WTR не встановлено; видимого impact не зафіксовано.</div>
+<div class="evidence"><a class="ev" href="https://drive.google.com/file/d/1XxgJVuq5UfqebHsY1qp7Nb2OMAEG9My2/view?usp=drivesdk" rel="noopener" target="_blank">⌘ Лог ↗</a></div>
+</div>
+</article><article class="bug open" data-search="bug-23 daily goals popup коротко показує попередній stage після завершення поточного stage bug-23 daily goals popup коротко показує попередній stage після завершення поточного stage low daily goals / ui refresh ⌄ repro: 100% кроки завершити stage daily goal (наприклад 4 → 8 → 12). відкрити daily goals popup. фактичний результат спочатку видно старий progress/state, після чого ui помітно перемикається на наступний stage. очікуваний результат актуальний state має бути підготовлений до показу popup або оновлення повинно бути навмисно анімоване. ▶ відео ↗" data-sev="Low">
+<button aria-expanded="true" class="bugsummary" type="button">
+<span class="bugid">BUG-23</span>
+<span class="bugtitle">Daily Goals popup коротко показує попередній stage після завершення поточного stage</span>
+<span class="chips">
+<span class="chip sev-low">Low</span>
+<span class="chip area">Daily Goals / UI Refresh</span>
+<span class="chev">⌄</span>
+</span>
+</button>
+<div class="bugbody">
+<span class="repro">Repro: 100%</span>
+<div class="box"><h4>Кроки</h4><ol><li>Завершити stage Daily Goal (наприклад 4 → 8 → 12).</li><li>Відкрити Daily Goals popup.</li></ol></div>
+<div class="cols">
+<div class="box actual"><h4>Фактичний результат</h4><p>Спочатку видно старий progress/state, після чого UI помітно перемикається на наступний stage.</p></div>
+<div class="box expected"><h4>Очікуваний результат</h4><p>Актуальний state має бути підготовлений до показу popup або оновлення повинно бути навмисно анімоване.</p></div>
+</div>
+<div class="evidence"><a class="ev" href="https://drive.google.com/file/d/16iB8avo6y13cFeqiVH4n0T1hpoDGRTlZ/view?usp=drivesdk" rel="noopener" target="_blank">▶ Відео ↗</a></div>
+</div>
+</article><article class="bug open" data-search="bug-24 нижня player panel має нерівні/обрізані borders на throne challenge screen bug-24 нижня player panel має нерівні/обрізані borders на throne challenge screen low throne challenge / ui ⌄ repro: 100% кроки відкрити throne challenge. переглянути fixed bottom player row. фактичний результат лівий/правий border/corner виглядають нерівно або частково clipped. очікуваний результат контейнер має мати симетричні, цілі borders/corners. ▧ скрін ↗" data-sev="Low">
+<button aria-expanded="true" class="bugsummary" type="button">
+<span class="bugid">BUG-24</span>
+<span class="bugtitle">Нижня player panel має нерівні/обрізані borders на Throne Challenge screen</span>
+<span class="chips">
+<span class="chip sev-low">Low</span>
+<span class="chip area">Throne Challenge / UI</span>
+<span class="chev">⌄</span>
+</span>
+</button>
+<div class="bugbody">
+<span class="repro">Repro: 100%</span>
+<div class="box"><h4>Кроки</h4><ol><li>Відкрити Throne Challenge.</li><li>Переглянути fixed bottom player row.</li></ol></div>
+<div class="cols">
+<div class="box actual"><h4>Фактичний результат</h4><p>Лівий/правий border/corner виглядають нерівно або частково clipped.</p></div>
+<div class="box expected"><h4>Очікуваний результат</h4><p>Контейнер має мати симетричні, цілі borders/corners.</p></div>
+</div>
+<div class="evidence"><a class="ev" href="https://drive.google.com/file/d/1m1JRS3nrWOgiFvtqbsFgRCfrH4-2nv94/view?usp=drivesdk" rel="noopener" target="_blank">▧ Скрін ↗</a></div>
+</div>
+</article><article class="bug open" data-search="bug-25 dragged tile рендериться під target slot overlay під час drag у hand bug-25 dragged tile рендериться під target slot overlay під час drag у hand low hand / ui layering ⌄ repro: 100% кроки long-press тайл у hand. перетягнути його до upper collection area. фактичний результат target slot overlay малюється поверх dragged tile та частково перекриває його. очікуваний результат dragged object має рендеритись на верхньому interaction layer. ▶ відео ↗" data-sev="Low">
+<button aria-expanded="true" class="bugsummary" type="button">
+<span class="bugid">BUG-25</span>
+<span class="bugtitle">Dragged tile рендериться під target slot overlay під час drag у hand</span>
+<span class="chips">
+<span class="chip sev-low">Low</span>
+<span class="chip area">Hand / UI Layering</span>
+<span class="chev">⌄</span>
+</span>
+</button>
+<div class="bugbody">
+<span class="repro">Repro: 100%</span>
+<div class="box"><h4>Кроки</h4><ol><li>Long-press тайл у hand.</li><li>Перетягнути його до upper collection area.</li></ol></div>
+<div class="cols">
+<div class="box actual"><h4>Фактичний результат</h4><p>Target slot overlay малюється поверх dragged tile та частково перекриває його.</p></div>
+<div class="box expected"><h4>Очікуваний результат</h4><p>Dragged object має рендеритись на верхньому interaction layer.</p></div>
+</div>
+<div class="evidence"><a class="ev" href="https://drive.google.com/file/d/1qk7UtKlhTkyKK_rKgNZOtD9krxrSR1F8/view?usp=drivesdk" rel="noopener" target="_blank">▶ Відео ↗</a></div>
+</div>
+</article><article class="bug open" data-search="bug-26 текст daily goal заходить під кнопку play на samsung note 10 при довгому title bug-26 текст daily goal заходить під кнопку play на samsung note 10 при довгому title low daily goals / layout ⌄ repro: 100% кроки на samsung note 10 відкрити daily goals із довгим task title, наприклад “reach high score 5 times”. фактичний результат task label візуально заходить під/у зону play button. очікуваний результат dynamic text layout має резервувати простір для cta та коректно wrap/ellipsis. ▧ скрін ↗" data-sev="Low">
+<button aria-expanded="true" class="bugsummary" type="button">
+<span class="bugid">BUG-26</span>
+<span class="bugtitle">Текст Daily Goal заходить під кнопку Play на Samsung Note 10 при довгому title</span>
+<span class="chips">
+<span class="chip sev-low">Low</span>
+<span class="chip area">Daily Goals / Layout</span>
+<span class="chev">⌄</span>
+</span>
+</button>
+<div class="bugbody">
+<span class="repro">Repro: 100%</span>
+<div class="box"><h4>Кроки</h4><ol><li>На Samsung Note 10 відкрити Daily Goals із довгим task title, наприклад “Reach high score 5 times”.</li></ol></div>
+<div class="cols">
+<div class="box actual"><h4>Фактичний результат</h4><p>Task label візуально заходить під/у зону Play button.</p></div>
+<div class="box expected"><h4>Очікуваний результат</h4><p>Dynamic text layout має резервувати простір для CTA та коректно wrap/ellipsis.</p></div>
+</div>
+<div class="evidence"><a class="ev" href="https://drive.google.com/file/d/1T3mnxFyGrqYYShja-NHRbKmOjHoKrp5P/view?usp=drivesdk" rel="noopener" target="_blank">▧ Скрін ↗</a></div>
+</div>
+</article><article class="bug open" data-search="bug-27 жорсткий перехід між artwork і чорним фоном видно на well done screen після завершення рівня bug-27 жорсткий перехід між artwork і чорним фоном видно на well done screen після завершення рівня low result screen / visual ⌄ repro: 100% кроки завершити рівень та відкрити well done screen. фактичний результат у верхній частині видно різку горизонтальну межу/ступінь між artwork і black background. очікуваний результат artwork/background transition має бути без видимого seam або з плавним gradient. ▧ скрін ↗" data-sev="Low">
+<button aria-expanded="true" class="bugsummary" type="button">
+<span class="bugid">BUG-27</span>
+<span class="bugtitle">Жорсткий перехід між artwork і чорним фоном видно на Well Done screen після завершення рівня</span>
+<span class="chips">
+<span class="chip sev-low">Low</span>
+<span class="chip area">Result Screen / Visual</span>
+<span class="chev">⌄</span>
+</span>
+</button>
+<div class="bugbody">
+<span class="repro">Repro: 100%</span>
+<div class="box"><h4>Кроки</h4><ol><li>Завершити рівень та відкрити Well Done screen.</li></ol></div>
+<div class="cols">
+<div class="box actual"><h4>Фактичний результат</h4><p>У верхній частині видно різку горизонтальну межу/ступінь між artwork і black background.</p></div>
+<div class="box expected"><h4>Очікуваний результат</h4><p>Artwork/background transition має бути без видимого seam або з плавним gradient.</p></div>
+</div>
+<div class="evidence"><a class="ev" href="https://drive.google.com/file/d/1tKpjP6TNvSQPTf29Tb96FSVZjRjv2XAa/view?usp=drivesdk" rel="noopener" target="_blank">▧ Скрін ↗</a></div>
+</div>
+</article><article class="bug open" data-search="bug-28 перший segment має іншу форму на well done progress bar bug-28 перший segment має іншу форму на well done progress bar low result screen / ui ⌄ repro: 100% кроки переглянути level milestone progress bar на well done screen. фактичний результат перший segment має іншу rounded/capsule форму, тоді як інші сегменти прямокутніші. очікуваний результат segments одного progress component мають мати послідовний visual language. ▧ скрін ↗" data-sev="Low">
+<button aria-expanded="true" class="bugsummary" type="button">
+<span class="bugid">BUG-28</span>
+<span class="bugtitle">Перший segment має іншу форму на Well Done progress bar</span>
+<span class="chips">
+<span class="chip sev-low">Low</span>
+<span class="chip area">Result Screen / UI</span>
+<span class="chev">⌄</span>
+</span>
+</button>
+<div class="bugbody">
+<span class="repro">Repro: 100%</span>
+<div class="box"><h4>Кроки</h4><ol><li>Переглянути level milestone progress bar на Well Done screen.</li></ol></div>
+<div class="cols">
+<div class="box actual"><h4>Фактичний результат</h4><p>Перший segment має іншу rounded/capsule форму, тоді як інші сегменти прямокутніші.</p></div>
+<div class="box expected"><h4>Очікуваний результат</h4><p>Segments одного progress component мають мати послідовний visual language.</p></div>
+</div>
+<div class="evidence"><a class="ev" href="https://drive.google.com/file/d/1tKpjP6TNvSQPTf29Tb96FSVZjRjv2XAa/view?usp=drivesdk" rel="noopener" target="_blank">▧ Скрін ↗</a></div>
+</div>
+</article><article class="bug open" data-search="bug-29 номер level 1000+ переноситься на два рядки в start level button у main menu bug-29 номер level 1000+ переноситься на два рядки в start level button у main menu low main menu / layout ⌄ repro: 100% кроки дійти/встановити level 999 та level 1000. порівняти label на start level button. фактичний результат 999 поміщається в один рядок, 1000+ переноситься на два рядки. очікуваний результат button layout має підтримувати 4+ digits без небажаного wrap. ▧ скрін ↗" data-sev="Low">
+<button aria-expanded="true" class="bugsummary" type="button">
+<span class="bugid">BUG-29</span>
+<span class="bugtitle">Номер Level 1000+ переноситься на два рядки в Start Level button у Main Menu</span>
+<span class="chips">
+<span class="chip sev-low">Low</span>
+<span class="chip area">Main Menu / Layout</span>
+<span class="chev">⌄</span>
+</span>
+</button>
+<div class="bugbody">
+<span class="repro">Repro: 100%</span>
+<div class="box"><h4>Кроки</h4><ol><li>Дійти/встановити Level 999 та Level 1000.</li><li>Порівняти label на Start Level button.</li></ol></div>
+<div class="cols">
+<div class="box actual"><h4>Фактичний результат</h4><p>999 поміщається в один рядок, 1000+ переноситься на два рядки.</p></div>
+<div class="box expected"><h4>Очікуваний результат</h4><p>Button layout має підтримувати 4+ digits без небажаного wrap.</p></div>
+</div>
+<div class="evidence"><a class="ev" href="https://drive.google.com/file/d/1JT-3gQe2ln3vo0CsGrNOaTjIKZhGImzg/view?usp=drivesdk" rel="noopener" target="_blank">▧ Скрін ↗</a></div>
+</div>
+</article><article class="bug open" data-search="bug-30 daily challenge label обрізається до “daily” у main menu bug-30 daily challenge label обрізається до “daily” у main menu low main menu / layout ⌄ repro: 100% кроки відкрити main menu. переглянути label під daily challenge icon. фактичний результат відображається лише “daily”, повна назва не поміщається. очікуваний результат label має відображати зрозумілу повну/узгоджену назву feature. ▧ скрін ↗" data-sev="Low">
+<button aria-expanded="true" class="bugsummary" type="button">
+<span class="bugid">BUG-30</span>
+<span class="bugtitle">Daily Challenge label обрізається до “Daily” у Main Menu</span>
+<span class="chips">
+<span class="chip sev-low">Low</span>
+<span class="chip area">Main Menu / Layout</span>
+<span class="chev">⌄</span>
+</span>
+</button>
+<div class="bugbody">
+<span class="repro">Repro: 100%</span>
+<div class="box"><h4>Кроки</h4><ol><li>Відкрити Main Menu.</li><li>Переглянути label під Daily Challenge icon.</li></ol></div>
+<div class="cols">
+<div class="box actual"><h4>Фактичний результат</h4><p>Відображається лише “Daily”, повна назва не поміщається.</p></div>
+<div class="box expected"><h4>Очікуваний результат</h4><p>Label має відображати зрозумілу повну/узгоджену назву feature.</p></div>
+</div>
+<div class="evidence"><a class="ev" href="https://drive.google.com/file/d/1SJjaj6h01IoQO_Qc4nGvPLZdHFDCjWND/view?usp=drivesdk" rel="noopener" target="_blank">▧ Скрін ↗</a></div>
+</div>
+</article><article class="bug open" data-search="bug-31 special tile зміщується вгору в ice/grass tutorial при tap bug-31 special tile зміщується вгору в ice/grass tutorial при tap low tutorial / visual ⌄ repro: 100% кроки запустити ice або grass tutorial. натиснути highlighted special tile. фактичний результат тайл візуально зміщується трохи вгору під час interaction. очікуваний результат highlighted tutorial tile не повинен змінювати позицію, якщо це не частина анімації. ▶ відео ↗" data-sev="Low">
+<button aria-expanded="true" class="bugsummary" type="button">
+<span class="bugid">BUG-31</span>
+<span class="bugtitle">Special tile зміщується вгору в Ice/Grass tutorial при tap</span>
+<span class="chips">
+<span class="chip sev-low">Low</span>
+<span class="chip area">Tutorial / Visual</span>
+<span class="chev">⌄</span>
+</span>
+</button>
+<div class="bugbody">
+<span class="repro">Repro: 100%</span>
+<div class="box"><h4>Кроки</h4><ol><li>Запустити Ice або Grass tutorial.</li><li>Натиснути highlighted special tile.</li></ol></div>
+<div class="cols">
+<div class="box actual"><h4>Фактичний результат</h4><p>Тайл візуально зміщується трохи вгору під час interaction.</p></div>
+<div class="box expected"><h4>Очікуваний результат</h4><p>Highlighted tutorial tile не повинен змінювати позицію, якщо це не частина анімації.</p></div>
+</div>
+<div class="evidence"><a class="ev" href="https://drive.google.com/file/d/1pqeT2WBgAqYOS-Ec_B-xDmVHDd1b3E2L/view?usp=drivesdk" rel="noopener" target="_blank">▶ Відео ↗</a></div>
+</div>
+</article><article class="bug open" data-search="bug-32 blue tile counters відокремлюються від тайлів під час shuffle animation bug-32 blue tile counters відокремлюються від тайлів під час shuffle animation low gameplay / visual ⌄ repro: 100% кроки мати numbered blue special tiles на полі. запустити shuffle. фактичний результат counter overlays лишаються видимими/тимчасово відриваються від тайлів, поки самі tiles рухаються. очікуваний результат counter overlay має рухатись синхронно з tile або ховатись на час shuffle transition. ▶ відео ↗" data-sev="Low">
+<button aria-expanded="true" class="bugsummary" type="button">
+<span class="bugid">BUG-32</span>
+<span class="bugtitle">Blue tile counters відокремлюються від тайлів під час Shuffle animation</span>
+<span class="chips">
+<span class="chip sev-low">Low</span>
+<span class="chip area">Gameplay / Visual</span>
+<span class="chev">⌄</span>
+</span>
+</button>
+<div class="bugbody">
+<span class="repro">Repro: 100%</span>
+<div class="box"><h4>Кроки</h4><ol><li>Мати numbered blue special tiles на полі.</li><li>Запустити Shuffle.</li></ol></div>
+<div class="cols">
+<div class="box actual"><h4>Фактичний результат</h4><p>Counter overlays лишаються видимими/тимчасово відриваються від тайлів, поки самі tiles рухаються.</p></div>
+<div class="box expected"><h4>Очікуваний результат</h4><p>Counter overlay має рухатись синхронно з tile або ховатись на час Shuffle transition.</p></div>
+</div>
+<div class="evidence"><a class="ev" href="https://drive.google.com/file/d/19TKgamKhUYFlPAAeOyFG4OhWZcCf4CCX/view?usp=drivesdk" rel="noopener" target="_blank">▶ Відео ↗</a></div>
+</div>
+</article></div></div></section>
+<section id="recs"><div class="wrap"><div class="sectionhead"><div><div class="kicker">04 / Product thinking</div><h2>UX та продуктові рекомендації</h2></div><div class="sub">Окремо від дефектів: покращення зрозумілості, консистентності та player experience.</div></div><div class="recgrid" id="recGrid"><article class="rec">
+<div class="recid">REC-01</div>
+<h3>Зробити описи Daily Goals самодостатніми</h3>
+<p>Назви на кшталт “Hit full combo” не пояснюють, яку конкретно дію очікує гра. Додати короткий description, tooltip або приклад умови виконання.</p>
+</article>
+<article class="rec">
+<div class="recid">REC-02</div>
+<h3>Пояснити, що таке IQ і на що він впливає</h3>
+<p>IQ показується поруч зі Score та Combo як ключова метрика, але не пояснюється її формула, накопичення або вплив на progression/rewards/ranking.</p>
+</article>
+<article class="rec">
+<div class="recid">REC-03</div>
+<h3>Показувати Daily Goal completion одразу в момент виконання</h3>
+<p>Tracking відбувається під час gameplay, але completion tip може з’явитися лише після завершення рівня. Миттєвий feedback зробить прогрес зрозумілішим.</p>
+</article>
+<article class="rec">
+<div class="recid">REC-04</div>
+<h3>Додати preview milestone reward у Daily Goals</h3>
+<p>Gift icon варто зробити tappable та показувати tooltip/preview, щоб гравець розумів, за що працює.</p>
+</article>
+<article class="rec">
+<div class="recid">REC-05</div>
+<h3>Розглянути “Highlight free tiles” як default-on</h3>
+<p>Для casual-аудиторії затемнення blocked tiles зменшує cognitive load і швидше пояснює доступні ходи.</p>
+</article>
+<article class="rec">
+<div class="recid">REC-06</div>
+<h3>Уніфікувати Settings icon</h3>
+<p>У Main Menu використовується gear, у level — three vertical lines. Один символ зменшить неоднозначність.</p>
+</article>
+<article class="rec">
+<div class="recid">REC-07</div>
+<h3>Стандартизувати dismiss behavior для popup-ів</h3>
+<p>Інфо поп-апи в Daily Goals і Challenge закриваються тапом за межі поп-апу. Розгляньте варіант, аби вони закривались лише кнопкою “Х” як і інші поп-апи в грі.</p>
+</article>
+<article class="rec">
+<div class="recid">REC-08</div>
+<h3>Візуально виділяти current player у Challenge result animation</h3>
+<p>Під час podium animation усі три профілі мають схожу вагу. Додати “You”, glow/outline або іншу emphasis для позиції користувача.</p>
+</article>
+<article class="rec">
+<div class="recid">REC-09</div>
+<h3>Дозволити cancel drag у hand</h3>
+<p>Після long-press/drag release практично комітить move. Корисно дозволити повернути тайл на місце, якщо release поза valid target.</p>
+<div class="evidence"><a class="ev" href="https://drive.google.com/file/d/1qk7UtKlhTkyKK_rKgNZOtD9krxrSR1F8/view?usp=drivesdk" rel="noopener" target="_blank">▶ Відео ↗</a></div>
+</article>
+<article class="rec">
+<div class="recid">REC-10</div>
+<h3>Уніфікувати формат countdown у Main Menu</h3>
+<p>Daily Goals використовує HH:MM:SS, Challenge — “9h 30m”. Один формат зробить dashboard візуально ціліснішим.</p>
+<div class="evidence"><a class="ev" href="https://drive.google.com/file/d/1SJjaj6h01IoQO_Qc4nGvPLZdHFDCjWND/view?usp=drivesdk" rel="noopener" target="_blank">▧ Скрін ↗</a></div>
+</article>
+<article class="rec">
+<div class="recid">REC-11</div>
+<h3>Уніфікувати reward/gift iconography між Challenge screens</h3>
+<p>Gift/reward icons у Challenge Info та main Challenge screen відрізняються. Спільний asset/style зменшить відчуття різних систем.</p>
+<div class="evidence"><a class="ev" href="https://drive.google.com/file/d/1hN5LsOpfwH0HeV8ycKE1Dtirxgt4b3Ix/view?usp=drivesdk" rel="noopener" target="_blank">▶ Відео ↗</a></div>
+</article>
+<article class="rec">
+<div class="recid">REC-12</div>
+<h3>Окремо перевірити analytics identity persistence при interrupted first launch</h3>
+<p>Analytics SDKs ініціалізуються дуже рано. Варто звернути увагу, чи на момент відправки перших івентів в аналітику у юзера створився сейв чи ні, аби не було ситуації, коли юзер закриє гру після відправки перших івентів, але перед створенням сейва, і потім заходить повторно. Іноді буває що при повторному заході нові івенти летять з новим юзер айді. І в аналітиці буде якийсь % юзерів, які зайшли в гру але не дійшли до тутора, і не буде зрозуміло чому, а по факту це просто дублі.</p>
+</article></div></div></section>
+<section id="tech"><div class="wrap"><div class="split"><div class="panel"><div class="kicker">05 / Passed checks</div><h3>Перевірені сценарії без знайдених проблем</h3><div id="passed"><div class="check"><span class="tick">✓</span><span>Переривання першого loading flow через вихід із гри — після повторного запуску коректне відновлення.</span></div>
+<div class="check"><span class="tick">✓</span><span>Переривання tutorial flow — після relaunch прогрес не ламається.</span></div>
+<div class="check"><span class="tick">✓</span><span>Force-stop/relaunch під час активного рівня та базових win/lose переходів — без критичної втрати стану.</span></div>
+<div class="check"><span class="tick">✓</span><span>Перезапуск під час reward за 10 рівнів — reward restore спрацьовує, нагорода видається у Main Menu.</span></div>
+<div class="check"><span class="tick">✓</span><span>Push notifications: SDK ініціалізується; notification tap успішно запускає гру.</span></div>
+<div class="check"><span class="tick">✓</span><span>Pair-механіка після нормального re-entry працює функціонально стабільно, окрім описаних edge cases.</span></div>
+<div class="check"><span class="tick">✓</span><span>System locale smoke: Arabic / German — запуск та базова взаємодія без crash/blocker.</span></div></div></div><div class="panel"><div class="kicker">06 / Technical notes</div><h3>Технічні спостереження</h3><div id="techRows"><div class="check tech"><span class="tick">•</span><span>Remote Config через rc.print: ab_active_module=hand, ads_ab_group=_default, inter_cooldown=60, inter_delay_hours=0, inter_min_level=4, inter_session_delay_seconds=60, rewarded_min_level=1.</span></div>
+<div class="check tech"><span class="tick">•</span><span>Збірка Unity IL2CPP; у трафіку/ініціалізації спостерігалися Firebase, AppsFlyer, Meta, devtodev та Google-сервіси.</span></div>
+<div class="check tech"><span class="tick">•</span><span>HTTPS payload-и не аналізувались на рівні body через production/non-debuggable build та обмеження certificate interception. Це coverage limitation, а не дефект.</span></div>
+<div class="check tech"><span class="tick">•</span><span>Внутрішній app sandbox недоступний через run-as, оскільки package non-debuggable; обходи/рут не використовувались.</span></div>
+<div class="check tech"><span class="tick">•</span><span>Debug A/B switch під час активного tutorial може тимчасово ламати pair tutorial interaction, але після виходу/повторного входу state відновлюється; production finding не створювався.</span></div></div><div class="evidence" style="margin-top:18px"><a class="ev" href="https://drive.google.com/file/d/1fnKKnWI9iskvaIl5ZL9HUyCl_lvF4rDj/view?usp=drivesdk" target="_blank">▶ Debug A/B tutorial video</a></div></div></div></div></section>
+</main>
+<footer class="foot"><div class="wrap">Mahjong Therapy • QA Test Report • Manual QA / Android • 04.10.2026</div></footer><a class="toTop" href="#">↑</a>
+<script>
+(function(){
+  document.documentElement.classList.remove('no-js');
+  document.documentElement.classList.add('js');
+
+  const bugList = document.getElementById('bugList');
+  const search = document.getElementById('search');
+  const filters = Array.from(document.querySelectorAll('.filter'));
+  const bugs = Array.from(document.querySelectorAll('.bug'));
+  let filter = 'All';
+
+  // In a real browser, start cards collapsed. If JS never runs, all details remain visible.
+  bugs.forEach((bug) => {
+    bug.classList.remove('open');
+    const btn = bug.querySelector('.bugsummary');
+    if (btn) {
+      btn.setAttribute('aria-expanded', 'false');
+      btn.addEventListener('click', () => {
+        const isOpen = bug.classList.toggle('open');
+        btn.setAttribute('aria-expanded', String(isOpen));
+      });
+    }
+  });
+
+  function apply(){
+    const q = (search?.value || '').trim().toLowerCase();
+    let shown = 0;
+    bugs.forEach((el) => {
+      const matchesSeverity = filter === 'All' || el.dataset.sev === filter;
+      const matchesQuery = !q || (el.dataset.search || '').includes(q);
+      const ok = matchesSeverity && matchesQuery;
+      el.classList.toggle('hidden', !ok);
+      if (ok) shown++;
+    });
+    const count = document.getElementById('shownCount');
+    if (count) count.textContent = `Показано: ${shown} / ${bugs.length}`;
+  }
+
+  if (search) search.addEventListener('input', apply);
+  filters.forEach((b) => {
+    b.addEventListener('click', () => {
+      filters.forEach((x) => x.classList.remove('active'));
+      b.classList.add('active');
+      filter = b.dataset.filter || 'All';
+      apply();
+    });
+  });
+  apply();
+
+  // Animate from the correct static values only when supported.
+  if ('IntersectionObserver' in window && 'requestAnimationFrame' in window) {
+    const nums = Array.from(document.querySelectorAll('[data-count]'));
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        const target = Number(el.dataset.count || el.textContent || 0);
+        const duration = 650;
+        const start = performance.now();
+        const run = (t) => {
+          const p = Math.min(1, (t - start) / duration);
+          el.textContent = String(Math.round(target * (1 - Math.pow(1-p,3))));
+          if (p < 1) requestAnimationFrame(run);
+          else el.textContent = String(target);
+        };
+        el.textContent = '0';
+        requestAnimationFrame(run);
+        obs.unobserve(el);
+      });
+    }, {threshold:.45});
+    nums.forEach((x) => obs.observe(x));
+  }
+})();
+</script>
+</body></html>
